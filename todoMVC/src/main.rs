@@ -32,7 +32,22 @@ impl Component for App {
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
-        let entries = LocalStorage::get(KEY).unwrap_or_else(|_| Vec::new());
+        let mut entries = LocalStorage::get(KEY).unwrap_or_else(|_| Vec::new());
+
+        
+
+        for n in 1..10001 {
+            let entry = Entry {
+                description: "todo".to_owned(),
+                completed: false,
+                editing: false,
+            };
+            entries.push(entry);
+
+        }
+
+        
+
         let state = State {
             entries,
             filter: Filter::All,
@@ -106,7 +121,7 @@ impl Component for App {
             <div class="todomvc-wrapper">
                 <section class="todoapp">
                     <header class="header">
-                        <h1>{ "todos" }</h1>
+                        <h1>{ "todos and me" }</h1>
                         { self.view_input(ctx.link()) }
                     </header>
                     <section class={classes!("main", hidden_class)}>

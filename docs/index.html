@@ -5,10 +5,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/todomvc-common@1.0.5/base.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/todomvc-app-css@2.3.0/index.css">
 
-    <script type="module">import init from '/test_todoMVC_yew/todomvc-b5d5d996147cf38e.js';init('/test_todoMVC_yew/todomvc-b5d5d996147cf38e_bg.wasm');</script>
-    <base href="/test_todoMVC_yew/">
+    <script type="module">import init from '/todomvc-90acec8e1a48c11a.js';init('/todomvc-90acec8e1a48c11a_bg.wasm');</script>
+    <base href="/">
   
-<link rel="preload" href="/test_todoMVC_yew/todomvc-b5d5d996147cf38e_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/test_todoMVC_yew/todomvc-b5d5d996147cf38e.js"></head>
+<link rel="preload" href="/todomvc-90acec8e1a48c11a_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/todomvc-90acec8e1a48c11a.js"></head>
   <body>
-</body></html>
+<script>(function () {
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var url = protocol + '//' + window.location.host + '/_trunk/ws';
+    var poll_interval = 5000;
+    var reload_upon_connect = () => {
+        window.setTimeout(
+            () => {
+                // when we successfully reconnect, we'll force a
+                // reload (since we presumably lost connection to
+                // trunk due to it being killed, so it will have
+                // rebuilt on restart)
+                var ws = new WebSocket(url);
+                ws.onopen = () => window.location.reload();
+                ws.onclose = reload_upon_connect;
+            },
+            poll_interval);
+    };
+
+    var ws = new WebSocket(url);
+    ws.onmessage = (ev) => {
+        const msg = JSON.parse(ev.data);
+        if (msg.reload) {
+            window.location.reload();
+        }
+    };
+    ws.onclose = reload_upon_connect;
+})()
+</script></body></html>

@@ -36,7 +36,7 @@ impl Component for App {
 
         
 
-        for n in 1..10001 {
+        for n in 1..1001 {
             let entry = Entry {
                 description: "todo".to_owned(),
                 completed: false,

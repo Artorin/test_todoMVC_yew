@@ -38,7 +38,7 @@ impl Component for App {
 
         for n in 1..1001 { // 10.000
             let entry = Entry {
-                description: "todo".to_owned(),
+                description: "todos".to_owned(),
                 completed: false,
                 editing: false,
             };
@@ -121,7 +121,7 @@ impl Component for App {
             <div class="todomvc-wrapper">
                 <section class="todoapp">
                     <header class="header">
-                        <h1>{ "todos and me" }</h1>
+                        <h1>{ "ToDo List" }</h1>
                         { self.view_input(ctx.link()) }
                     </header>
                     <section class={classes!("main", hidden_class)}>
@@ -142,17 +142,12 @@ impl Component for App {
                             <strong>{ self.state.total() }</strong>
                             { " item(s) left" }
                         </span>
-                        <ul class="filters">
-                            { for Filter::iter().map(|flt| self.view_filter(flt, ctx.link())) }
-                        </ul>
-                        <button class="clear-completed" onclick={ctx.link().callback(|_| Msg::ClearCompleted)}>
-                            { format!("Clear completed ({})", self.state.total_completed()) }
-                        </button>
+                        
+
                     </footer>
                 </section>
                 <footer class="info">
                     <p>{ "Double-click to edit a todo" }</p>
-                    <p>{ "Part of " }<a href="http://todomvc.com/" target="_blank">{ "TodoMVC" }</a></p>
                 </footer>
             </div>
         }

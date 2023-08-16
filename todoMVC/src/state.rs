@@ -13,12 +13,6 @@ impl State {
         self.entries.len()
     }
 
-    pub fn total_completed(&self) -> usize {
-        self.entries
-            .iter()
-            .filter(|e| Filter::Completed.fits(e))
-            .count()
-    }
 
     pub fn is_all_completed(&self) -> bool {
         let mut filtered_iter = self
@@ -34,21 +28,11 @@ impl State {
         filtered_iter.all(|e| e.completed)
     }
 
-    pub fn clear_completed(&mut self) {
-        let entries = self
-            .entries
-            .drain(..)
-            .filter(|e| Filter::Active.fits(e))
-            .collect();
-        self.entries = entries;
-    }
-
     pub fn toggle(&mut self, idx: usize) {
-        let filter = self.filter;
+        
         let entry = self
             .entries
             .iter_mut()
-            .filter(|e| filter.fits(e))
             .nth(idx)
             .unwrap();
         entry.completed = !entry.completed;
@@ -63,11 +47,10 @@ impl State {
     }
 
     pub fn toggle_edit(&mut self, idx: usize) {
-        let filter = self.filter;
+        
         let entry = self
             .entries
             .iter_mut()
-            .filter(|e| filter.fits(e))
             .nth(idx)
             .unwrap();
         entry.editing = !entry.editing;
@@ -83,11 +66,10 @@ impl State {
         if val.is_empty() {
             self.remove(idx);
         } else {
-            let filter = self.filter;
+            
             let entry = self
                 .entries
                 .iter_mut()
-                .filter(|e| filter.fits(e))
                 .nth(idx)
                 .unwrap();
             entry.description = val;
@@ -101,7 +83,6 @@ impl State {
                 .entries
                 .iter()
                 .enumerate()
-                .filter(|&(_, e)| self.filter.fits(e))
                 .collect::<Vec<_>>();
             let &(idx, _) = entries.get(idx).unwrap();
             idx
@@ -132,11 +113,4 @@ impl Filter {
         }
     }
 
-    pub fn as_href(&self) -> &'static str {
-        match self {
-            Filter::All => "#/",
-            Filter::Active => "#/active",
-            Filter::Completed => "#/completed",
-        }
-    }
 }

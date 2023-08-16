@@ -18,7 +18,6 @@ pub enum Msg {
     ToggleAll,
     ToggleEdit(usize),
     Toggle(usize),
-    ClearCompleted,
     Focus,
 }
 
@@ -36,7 +35,7 @@ impl Component for App {
 
         
 
-        for n in 1..1001 { // 10.000
+        for n in 1..100 { // 10.000
             let entry = Entry {
                 description: "todos".to_owned(),
                 completed: false,
@@ -84,7 +83,6 @@ impl Component for App {
                     .state
                     .entries
                     .iter()
-                    .filter(|e| self.state.filter.fits(e))
                     .nth(idx)
                     .unwrap();
                 self.state.edit_value = entry.description.clone();
@@ -98,9 +96,7 @@ impl Component for App {
             Msg::Toggle(idx) => {
                 self.state.toggle(idx);
             }
-            Msg::ClearCompleted => {
-                self.state.clear_completed();
-            }
+            
             Msg::Focus => {
                 if let Some(input) = self.focus_ref.cast::<InputElement>() {
                     input.focus().unwrap();
@@ -134,7 +130,7 @@ impl Component for App {
                         />
                         <label for="toggle-all" />
                         <ul class="todo-list">
-                            { for self.state.entries.iter().filter(|e| self.state.filter.fits(e)).enumerate().map(|e| self.view_entry(e, ctx.link())) }
+                            { for self.state.entries.iter().enumerate().map(|e| self.view_entry(e, ctx.link())) }
                         </ul>
                     </section>
                     <footer class={classes!("footer", hidden_class)}>
@@ -155,23 +151,6 @@ impl Component for App {
 }
 
 impl App {
-    fn view_filter(&self, filter: Filter, link: &Scope<Self>) -> Html {
-        let cls = if self.state.filter == filter {
-            "selected"
-        } else {
-            "not-selected"
-        };
-        html! {
-            <li>
-                <a class={cls}
-                   href={filter.as_href()}
-                   onclick={link.callback(move |_| Msg::SetFilter(filter))}
-                >
-                    { filter }
-                </a>
-            </li>
-        }
-    }
 
     fn view_input(&self, link: &Scope<Self>) -> Html {
         let onkeypress = link.batch_callback(|e: KeyboardEvent| {
@@ -185,18 +164,11 @@ impl App {
             }
         });
         html! {
-            // You can use standard Rust comments. One line:
-            // <li></li>
             <input
                 class="new-todo"
                 placeholder="What needs to be done?"
                 {onkeypress}
             />
-            /* Or multiline:
-            <ul>
-                <li></li>
-            </ul>
-            */
         }
     }
 

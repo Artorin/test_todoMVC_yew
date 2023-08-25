@@ -689,7 +689,7 @@ async function __wbg_init(input) {
     if (wasm !== undefined) return wasm;
 
     if (typeof input === 'undefined') {
-        input = new URL('todomvc-3e8792f281ca1224_bg.wasm', import.meta.url);
+        input = new URL('todomvc-352254a2dd20aecb_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

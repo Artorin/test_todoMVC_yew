@@ -33,19 +33,14 @@ impl Component for App {
     fn create(_ctx: &Context<Self>) -> Self {
         let mut entries = LocalStorage::get(KEY).unwrap_or_else(|_| Vec::new());
 
-        
-
-        for n in 0..6000 { // 10.000
+        for n in 0..10 { // 10.000
             let entry = Entry {
-                description: "todos".to_owned(),
+                description: "todo".to_owned(),
                 completed: false,
                 editing: false,
             };
             entries.push(entry);
-
         }
-
-        
 
         let state = State {
             entries,
